@@ -1,20 +1,33 @@
-import { Avatar, Button, Descriptions, Skeleton } from 'antd'
+import { Avatar, Button, Descriptions, Skeleton, Alert } from 'antd'
 import { SyncOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
-import { changeUser } from '../../redux/asyncReduxConvencional'
+import { changeUser, cleanError } from '../../redux/asyncReduxConvencional'
+import { useState } from 'react';
 
 function CardInferior(){
 
+    const [muestraError, setMuestraError] = useState(0);
     const dispatch = useDispatch();
     const usuario =useSelector((state)=>state.changeUserReducer.infoUser)
     const isLoading =useSelector((state)=>state.changeUserReducer.isLoading)
+    const error =useSelector((state)=>state.changeUserReducer.error)
+    const errorMessage =useSelector((state)=>state.changeUserReducer.message)
 
     const cambiaUsuario = () => {
         dispatch(changeUser());
     }
+    const handleClose = () => {
+        dispatch(cleanError());
+    }
     return (
 
         <>
+            {
+                error && (
+                    <Alert message={errorMessage} type="error" closable afterClose={handleClose} />
+                )
+            }
+            <br />
             <Avatar src={usuario.picture === undefined ? "" : usuario.picture.medium } style={{backgroundColor: 'red'}} size={64}>
                 Usuario
             </Avatar>

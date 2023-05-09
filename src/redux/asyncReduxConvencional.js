@@ -12,6 +12,7 @@ const initialStateInfoUser = {
   const SET_DATA_INFO_USER = "SET_DATA_INFO_USER";
   const CHANGE_LOADING_INFO_USER = "CHANGE_LOADING_INFO_USER";
   const ERROR_MESSAGE = "ERROR_MESSAGE";
+  const CLEAN_ERROR_USR_CONV = "CLEAN_ERROR_USR_CONV";
   
   
   
@@ -33,6 +34,13 @@ const initialStateInfoUser = {
             ...state,
             error: !state.error,
             message: action.payload,
+            isLoading: !state.isLoading
+            };
+        case CLEAN_ERROR_USR_CONV:
+            return {
+            ...state,
+            error: !state.error,
+            message: "",
             };
         default:
         return state;
@@ -53,17 +61,22 @@ const initialStateInfoUser = {
             type: CHANGE_LOADING_INFO_USER,
         });
         
-        console.log(response.data.results[0])
+        console.log("Reponse de user",response)
         dispatch({
             type: SET_DATA_INFO_USER,
             payload: response.data.results[0]
         });
 
     } catch (error) {
+        console.log("Entra error", error)
         dispatch({
         type: ERROR_MESSAGE,
-        payload: error.response.data,
+        payload: error.message,
         });
         
     }
   };
+
+  export const cleanError = () =>({
+    type: CLEAN_ERROR_USR_CONV,
+  });
